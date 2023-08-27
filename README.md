@@ -26,7 +26,7 @@ To run this application using Docker:
 ```
 version: '3'
 services:
-  videoserver:
+  patreon-podcast-feeds:
     image: trevorsharp/patreon-podcast-feeds:latest
     container_name: patreon-podcast-feeds
     restart: unless-stopped
