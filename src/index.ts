@@ -23,6 +23,12 @@ fastify.get('/', async (_, reply) => {
   return 'Patreon Podcast Feeds Is Up And Running';
 });
 
+fastify.get('/update', async (_, reply) => {
+  updateFeeds();
+  reply.code(200);
+  return 'Updating Feeds';
+});
+
 fastify.get<{ Params: { feedId: string } }>('/:feedId', async (request, reply) => {
   const feedId = feeds.find((feed) => feed.toLowerCase() === request.params.feedId.toLowerCase());
   if (!feedId) {
