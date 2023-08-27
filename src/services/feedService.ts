@@ -13,7 +13,7 @@ const buildFeed = (hostname: string, campaign: NonNullable<Campaign>, posts: Pos
   posts.forEach((post) =>
     feed.addItem({
       title: post.title,
-      description: post.description,
+      description: `${post.description}\n\n${post.patreonUrl}`,
       url: post.patreonUrl,
       date: post.publishedOn,
       enclosure: {
