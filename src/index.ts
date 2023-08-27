@@ -7,7 +7,7 @@ import { buildFeed } from './services/feedService';
 
 dotenv.config();
 
-const feeds = process.env.feeds?.split(',').map((feedId) => feedId.trim()) ?? [];
+const feeds = process.env.FEEDS?.split(',').map((feedId) => feedId.trim()) ?? [];
 
 const fastify = Fastify({
   logger: true,
