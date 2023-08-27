@@ -1,0 +1,13 @@
+{
+  "name": "patreon-podcast-feeds",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf ./build && tsc --build tsconfig.json",
+    "start": "node ./build/index.js"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.2",
+    "typescript": "5.2.2"
+  }
+}
