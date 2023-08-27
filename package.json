@@ -12,7 +12,6 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
-    "@fastify/static": "^6.10.2",
     "dotenv": "^16.3.1",
     "fastify": "^4.22.0",
     "node-cache": "^5.1.2",

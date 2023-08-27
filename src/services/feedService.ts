@@ -2,7 +2,7 @@ import { Podcast } from 'podcast';
 import { Campaign } from '../types/campaign';
 import { Post } from '../types/post';
 
-const buildFeed = (hostname: string, campaign: NonNullable<Campaign>, posts: Post[]) => {
+const buildFeed = (hostname: string, feedId: string, campaign: NonNullable<Campaign>, posts: Post[]) => {
   const feed = new Podcast({
     title: campaign.title,
     description: campaign.description,
@@ -17,7 +17,7 @@ const buildFeed = (hostname: string, campaign: NonNullable<Campaign>, posts: Pos
       url: post.patreonUrl,
       date: post.publishedOn,
       enclosure: {
-        url: `http://${hostname}/content/${post.id}.mp4`,
+        url: `http://${hostname}/${feedId}/${post.id}`,
         type: 'video/mp4',
       },
       itunesDuration: post.duration,
