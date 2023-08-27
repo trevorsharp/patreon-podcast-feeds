@@ -53,7 +53,13 @@ fastify.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
   console.log(`Server is now listening on ${address}`);
 });
 
+let currentlyUpdating = false;
+
 const updateFeeds = async () => {
+  if (currentlyUpdating) return;
+
+  currentlyUpdating = true;
+
   for (let i = 0; i < feeds.length; i++) {
     const campaign = await searchForCampaign(feeds[i]);
     if (!campaign) throw `Could not find campaign for feed ${feeds[i]}`;
@@ -62,6 +68,8 @@ const updateFeeds = async () => {
 
     await downloadNewEpisodes(posts);
   }
+
+  currentlyUpdating = false;
 };
 
 setInterval(() => updateFeeds().catch((e) => console.error(e)), 10 * 60 * 1000);
