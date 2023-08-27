@@ -25,10 +25,16 @@ fastify.get('/', async (_, reply) => {
 
 fastify.get<{ Params: { feedId: string } }>('/:feedId', async (request, reply) => {
   const feedId = feeds.find((feed) => feed.toLowerCase() === request.params.feedId.toLowerCase());
-  if (!feedId) return reply.code(404);
+  if (!feedId) {
+    reply.code(404);
+    return 'Feed Not Found';
+  }
 
   const campaign = await searchForCampaign(feedId);
-  if (!campaign) return reply.code(404);
+  if (!campaign) {
+    reply.code(404);
+    return 'Campaign Not Found';
+  }
 
   const posts = await getPosts(campaign.id);
 
