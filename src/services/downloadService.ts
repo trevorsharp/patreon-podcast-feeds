@@ -1,4 +1,4 @@
-import fs, { promises as fsPromises } from 'fs';
+import fs from 'fs';
 import https from 'https';
 import { Post } from '../types/post';
 
@@ -7,8 +7,6 @@ const contentFolder = '/app/content';
 const getDownloadFileName = (postId: string) => `${contentFolder}/${postId}.mp4`;
 
 const downloadNewEpisodes = async (posts: Post[]) => {
-  await fsPromises.mkdir(contentFolder);
-
   const downloadQueue = posts.reduce(
     (acc, post) => (fs.existsSync(getDownloadFileName(post.id)) ? acc : [...acc, post]),
     [] as Post[]
@@ -37,7 +35,7 @@ const downloadNewEpisodes = async (posts: Post[]) => {
         });
     });
 
-    await fsPromises.rename(tempFileName, downloadFileName);
+    await fs.promises.rename(tempFileName, downloadFileName);
   }
 };
 
