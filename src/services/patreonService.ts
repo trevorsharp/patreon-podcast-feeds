@@ -46,7 +46,7 @@ const getLoginCookies = async () => {
     }
   });
 
-  setCache(cacheKey, cookies, 30 * 60);
+  setCache(cacheKey, cookies, 2 * 60 * 60);
 
   return cookies;
 };

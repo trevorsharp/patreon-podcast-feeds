@@ -53,3 +53,5 @@ const updateFeeds = async () => {
 };
 
 setInterval(() => updateFeeds().catch((e) => console.error(e)), 10 * 60 * 1000);
+
+console.log(`Feeds - ${feeds.join(' / ')}`);
