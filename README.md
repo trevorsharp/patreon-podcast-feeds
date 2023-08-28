@@ -1,6 +1,6 @@
 # Patreon Podcast Feeds
 
-Create video podcast feeds from Patreon content
+Create podcast feeds from Patreon videos
 
 ## Features
 
