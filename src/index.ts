@@ -5,9 +5,7 @@ import { buildFeed } from './services/feedService';
 
 dotenv.config();
 
-const fastify = Fastify({
-  logger: true,
-});
+const fastify = Fastify();
 
 fastify.get('/', async (_, reply) => {
   reply.code(200);
