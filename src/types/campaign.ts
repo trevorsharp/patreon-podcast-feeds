@@ -26,7 +26,7 @@ const campaignSchema = z
     };
   });
 
-type Campaign = z.infer<typeof campaignSchema>;
+type Campaign = NonNullable<z.infer<typeof campaignSchema>>;
 
 export { campaignSchema };
 export type { Campaign };

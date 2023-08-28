@@ -2,7 +2,7 @@ import { Podcast } from 'podcast';
 import { Campaign } from '../types/campaign';
 import { Post } from '../types/post';
 
-const buildFeed = (hostname: string, feedId: string, campaign: NonNullable<Campaign>, posts: Post[]) => {
+const buildFeed = (hostname: string, feedId: string, campaign: Campaign, posts: Post[]) => {
   const feed = new Podcast({
     title: campaign.title,
     description: campaign.description,

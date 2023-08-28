@@ -46,7 +46,7 @@ const getLoginCookies = async () => {
     }
   });
 
-  setCache(cacheKey, cookies, 2 * 60 * 60);
+  setCache<string>(cacheKey, cookies, 2 * 60 * 60);
 
   return cookies;
 };
@@ -67,14 +67,9 @@ const searchForCampaign = async (searchText: string) => {
     throw `Failed to search for campaign - ${response.statusText}`;
   }
 
-  const campaign = await response
-    .json()
-    .then((responseBody) => campaignSchema.parse(responseBody))
-    .catch(() => {
-      throw 'Failed to parse campaigns';
-    });
+  const campaign = await response.json().then((responseBody) => campaignSchema.parse(responseBody));
 
-  if (campaign) setCache(cacheKey, campaign, 7 * 24 * 60 * 60);
+  if (campaign) setCache<Campaign>(cacheKey, campaign, 7 * 24 * 60 * 60);
 
   return campaign;
 };
@@ -100,14 +95,9 @@ const getPosts = async (campaignId: string) => {
     throw `Failed to fetch Patreon posts - ${response.statusText}`;
   }
 
-  const posts = await response
-    .json()
-    .then((responseBody) => postsSchema.parse(responseBody))
-    .catch(() => {
-      throw 'Failed to parse posts';
-    });
+  const posts = await response.json().then((responseBody) => postsSchema.parse(responseBody));
 
-  setCache(cacheKey, posts, 15 * 60);
+  setCache<Post[]>(cacheKey, posts, 15 * 60);
 
   return posts;
 };
