@@ -30,6 +30,8 @@ services:
     image: trevorsharp/patreon-podcast-feeds:latest
     container_name: patreon-podcast-feeds
     restart: unless-stopped
+    ports:
+      - 80:3000
     environment:
       - 'PATREON_EMAIL=email@example.com'
       - 'PATREON_PASSWORD=XXXXXXXXXXXXXX'
