@@ -9,6 +9,7 @@ const campaignSchema = z
           name: z.string(),
           summary: z.string(),
           avatar_photo_url: z.string(),
+          url: z.string(),
         }),
       })
     ),
@@ -23,6 +24,7 @@ const campaignSchema = z
       title: campaign.attributes.name,
       description: campaign.attributes.summary,
       coverUrl: campaign.attributes.avatar_photo_url,
+      patreonUrl: campaign.attributes.url,
     };
   });
 

@@ -8,6 +8,7 @@ const buildFeed = (hostname: string, feedId: string, campaign: Campaign, posts: 
     description: campaign.description,
     imageUrl: campaign.coverUrl,
     author: campaign.title,
+    siteUrl: campaign.patreonUrl,
   });
 
   posts.forEach((post) =>
