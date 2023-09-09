@@ -1,47 +1,37 @@
-import dotenv from 'dotenv';
-import Fastify from 'fastify';
+import { Hono } from 'hono';
 import { getPosts, searchForCampaign } from './services/patreonService';
 import { buildFeed } from './services/feedService';
 
-dotenv.config();
+const app = new Hono();
 
-const fastify = Fastify();
+app.get('/', (c) => c.text('Patreon Podcast Feeds Is Up And Running'));
 
-fastify.get('/', async (_, reply) => {
-  reply.code(200);
-  return 'Patreon Podcast Feeds Is Up And Running';
-});
+app.get('/:feedId', async (c) => {
+  const feedId = c.req.param('feedId');
+  const hostname = c.req.headers.get('host') ?? '';
 
-fastify.get<{ Params: { feedId: string } }>('/:feedId', async (request, reply) => {
-  const campaign = await searchForCampaign(request.params.feedId);
-  if (!campaign) {
-    reply.code(404);
-    return 'Campaign Not Found';
-  }
+  const campaign = await searchForCampaign(feedId);
+  if (!campaign) return c.text('Campaign Not Found', 404);
 
   const posts = await getPosts(campaign.id);
 
-  reply.code(200);
-  return buildFeed(request.hostname, request.params.feedId, campaign, posts);
+  return c.text(buildFeed(hostname, feedId, campaign, posts));
 });
 
-fastify.get<{ Params: { feedId: string; postId: string } }>('/:feedId/:postId', async (request, reply) => {
-  const campaign = await searchForCampaign(request.params.feedId);
-  if (!campaign) {
-    reply.code(404);
-    return 'Campaign Not Found';
-  }
+app.get('/:feedId/:postId', async (c) => {
+  const feedId = c.req.param('feedId');
+  const postId = c.req.param('postId');
 
-  const post = await getPosts(campaign.id).then((posts) => posts.find((post) => post.id === request.params.postId));
-  if (!post) {
-    reply.code(404);
-    return 'Post Not Found';
-  }
+  const campaign = await searchForCampaign(feedId);
+  if (!campaign) return c.text('Campaign Not Found', 404);
 
-  reply.redirect(302, post.downloadUrl);
+  const post = await getPosts(campaign.id).then((posts) => posts.find((post) => post.id === postId));
+  if (!post) return c.text('Post Not Found', 404);
+
+  return c.redirect(post.downloadUrl);
 });
 
-fastify.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {
-  if (err) throw err;
-  console.log(`Server is now listening on ${address}`);
-});
+export default {
+  fetch: app.fetch,
+  port: 3000,
+};
