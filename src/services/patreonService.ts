@@ -1,14 +1,9 @@
-import { Campaign, campaignSchema } from '../types/campaign';
+import { campaignSchema } from '../types/campaign';
 import { campaignSearchSchema } from '../types/campaignSearch';
-import { Post, postsSchema } from '../types/post';
-import { get as getCache, set as setCache } from './cacheService';
+import { postsSchema } from '../types/post';
+import { withCache } from './cacheService';
 
-const getLoginCookies = async () => {
-  const cacheKey = 'patreon-login-cookies';
-  const cacheResult = getCache<string>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const getLoginCookies = withCache('patreon-login-cookies', 2 * 60 * 60, async () => {
   const response = await fetch('https://www.patreon.com/api/auth?json-api-version=1.0', {
     method: 'POST',
     body: JSON.stringify({
@@ -44,17 +39,10 @@ const getLoginCookies = async () => {
     }
   });
 
-  setCache<string>(cacheKey, cookies, 2 * 60 * 60);
-
   return cookies;
-};
+});
 
-const searchForCampaign = async (searchText: string) => {
-  const cacheKey = `campaign-search-${searchText}`;
-  const cacheResult = getCache<Campaign>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const searchForCampaign = withCache('patreon-campaign-search-', 7 * 24 * 60 * 60, async (searchText: string) => {
   const searchResponse = await fetch(
     `https://www.patreon.com/api/search?q=${encodeURIComponent(searchText)}&json-api-version=1.0`
   );
@@ -73,19 +61,10 @@ const searchForCampaign = async (searchText: string) => {
     `https://www.patreon.com/api/campaigns/${campaignId}?fields[campaign]=avatar_photo_url%2Cname%2Csummary%2Curl&json-api-version=1.0`
   );
 
-  const campaign = await response.json().then((responseBody) => campaignSchema.parse(responseBody));
+  return await response.json().then((responseBody) => campaignSchema.parse(responseBody));
+});
 
-  if (campaign) setCache<Campaign>(cacheKey, campaign, 7 * 24 * 60 * 60);
-
-  return campaign;
-};
-
-const getPosts = async (campaignId: string) => {
-  const cacheKey = `posts-${campaignId}`;
-  const cacheResult = getCache<Post[]>(cacheKey);
-
-  if (cacheResult) return cacheResult;
-
+const getPosts = withCache('patreon-posts-', 15 * 60, async (campaignId: string) => {
   const cookies = await getLoginCookies();
 
   const response = await fetch(
@@ -101,11 +80,7 @@ const getPosts = async (campaignId: string) => {
     throw `Failed to fetch Patreon posts - ${response.statusText}`;
   }
 
-  const posts = await response.json().then((responseBody) => postsSchema.parse(responseBody));
-
-  setCache<Post[]>(cacheKey, posts, 15 * 60);
-
-  return posts;
-};
+  return await response.json().then((responseBody) => postsSchema.parse(responseBody));
+});
 
 export { getPosts, searchForCampaign };
