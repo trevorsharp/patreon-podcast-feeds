@@ -68,7 +68,7 @@ const getPosts = withCache('patreon-posts-', 15 * 60, async (campaignId: string)
   const cookies = await getLoginCookies();
 
   const response = await fetch(
-    `https://www.patreon.com/api/posts?fields[post]=title%2Cteaser_text%2Curl%2Cpublished_at%2Ccurrent_user_can_view%2Cpost_file&filter[campaign_id]=${campaignId}&filter[contains_exclusive_posts]=true&filter[is_draft]=false&filter[media_types]=video&json-api-version=1.0`,
+    `https://www.patreon.com/api/posts?fields[post]=title%2Cteaser_text%2Curl%2Cpublished_at%2Ccurrent_user_can_view%2Cpost_file&filter[campaign_id]=${campaignId}&filter[contains_exclusive_posts]=true&filter[is_draft]=false&filter[media_types]=video&sort=-published_at&json-api-version=1.0`,
     {
       headers: {
         Cookie: cookies,

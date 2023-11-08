@@ -7,7 +7,7 @@ const postsSchema = z
         id: z.string(),
         attributes: z.object({
           title: z.string(),
-          teaser_text: z.string(),
+          teaser_text: z.string().nullable().default(''),
           url: z.string(),
           published_at: z.coerce.date(),
           current_user_can_view: z.boolean(),
