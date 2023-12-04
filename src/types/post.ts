@@ -16,7 +16,7 @@ const postsSchema = z
               download_url: z.string(),
               duration: z.number(),
             })
-            .optional(),
+            .nullable().optional(),
         }),
       })
     ),
