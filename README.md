@@ -1,5 +1,7 @@
 # Patreon Podcast Feeds
 
+‼️ NOTE - This repo is no longer actively maintained
+
 Create podcast feeds from Patreon videos
 
 ## Features
